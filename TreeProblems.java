@@ -1,5 +1,5 @@
 /*
- * *** YOUR NAME GOES HERE / YOUR SECTION NUMBER ***
+ * *** BRODY DARRAH / COMP 272, SECTION 002 ***
  *
  * This java file contains several simple tree problems that need to be
  * codified. These routines  must use the TreeMap and TreeSet library
@@ -27,7 +27,16 @@ public class TreeProblems {
     // *several* lines of code. Hint: create two temporary TreeSets and utilize the
     // methods retainAll(), addAll(), and removeAll(). But in the end, get something to work.
 
-    return setA;
+
+    // Create 2 new sets, one for unique elements, one for common elements.
+    Set<Integer> unique = new TreeSet<>(setA);
+    unique.addAll(setB);
+    Set<Integer> common = new TreeSet<>(setA);
+    common.retainAll(setB);
+
+    // remove common elements
+    unique.removeAll(common);
+    return unique;
   }
 
 
@@ -42,6 +51,17 @@ public class TreeProblems {
 
     // INSERT CODE HERE.
 
+    // Collect keys to remove into a list
+    List<Integer> toRemove = new ArrayList<>();
+    for (Integer k : treeMap.keySet()){
+      if (k % 2 == 0){
+        toRemove.add(k);
+      }
+    }
+    // Remove all collected keys from the map
+    for (Integer k : toRemove){
+      treeMap.remove(k);
+    }
     return;
   }
 
@@ -57,8 +77,19 @@ public class TreeProblems {
 
     // INSERT CODE HERE
 
-    return false;
-
+    if (tree1.size() != tree2.size()){
+      return false; // different sizes
+    }
+    for (Map.Entry<Integer, String> entry : tree1.entrySet()){
+      // check if key exists and val matches
+      if (!tree2.containsKey(entry.getKey())){
+        return false;
+      }
+      if (!tree2.get(entry.getKey()).equals(entry.getValue())){
+        return false;
+      }
+    }
+    return true;
   }
 
 } // end treeProblems class

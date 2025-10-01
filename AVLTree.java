@@ -1,6 +1,6 @@
 
 /*
- * *** YOUR NAME GOES HERE / YOUR SECTION NUMBER ***
+ * *** BRODY DARRAH / COMP 272, SECTION 002 ***
  *
  * This java file is a Java object implementing simple AVL Tree.
  * You are to complete the deleteElement method.
@@ -362,6 +362,71 @@ class LUC_AVLTree {
          * do many of the same things as this method.
          */
 
+        // Base Case:
+        if (node == null){
+            return null;
+        }
+
+
+        if (value < node.value){
+            // value is in the left subtree, recurse
+            node.leftChild = deleteElement(value, node.leftChild);
+        } else if (value > node.value){
+            // value is in the right subtree, recurse
+            node.rightChild = deleteElement(value, node.rightChild);
+        } else {
+            // found node to delete
+
+            // Case 1 and 2:
+            if (node.leftChild == null){
+                // replace w right child
+                return node.rightChild;
+            }
+            if (node.rightChild == null){
+                // replace w left child
+                return node.leftChild;
+            }
+
+            // Case 3:
+            // find inorder successor
+            Node successor = minValueNode(node.rightChild);
+
+            // copy successors value to current node
+            node.value = successor.value;
+
+            // delete the inorder successor from right subtree
+            node.rightChild = deleteElement(successor.value, node.rightChild);
+        }
+
+
+        // update height of current node
+        node.height = getMaxHeight(getHeight(node.leftChild), getHeight(node.rightChild)) + 1;
+
+        //check balance factor for rotations
+        int bf = getBalanceFactor(node);
+
+        // LEFT heavy
+        if (bf > 1){
+            if (getBalanceFactor(node.leftChild) >= 0){
+                //LL case
+                return LLRotation(node);
+            } else {
+                //LR case
+                return LRRotation(node);
+            }
+        }
+
+        // RIGHT heavy
+        if (bf < -1){
+            if (getBalanceFactor(node.rightChild) <= 0){
+                //RR case
+                return RRRotation(node);
+            } else {
+                //RL case
+                return RLRotation(node);
+            }
+        }
+        // return current node
         return node;
     }
 
